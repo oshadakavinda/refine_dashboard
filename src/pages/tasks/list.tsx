@@ -67,15 +67,12 @@ const List = ({ children }: React.PropsWithChildren) => {
       }
     }
 
-    const unassignedStage = tasks.data.filter((task) => task.stageId === null)
-
     const grouped: TaskStage[] = stages.data.map((stage) => ({
       ...stage,
       tasks: tasks.data.filter((task) => task.stageId?.toString() === stage.id)
     }))
 
     return {
-      unassignedStage,
       columns: grouped
     }
   }, [stages, tasks])
@@ -124,35 +121,13 @@ const List = ({ children }: React.PropsWithChildren) => {
       </div>
       <KanbanBoardContainer>
         <KanbanBoard onDragEnd={handleOnDragEnd}>
-          <KanbanColumn
-            id="unassigned"
-            title={"unassigned"}
-            count={taskStages.unassignedStage.length || 0}
-            onAddClick={() => handleAddCard({ stageId: 'unassigned' })}
-          >
-            {taskStages.unassignedStage.map((task) => (
-              <KanbanItem key={task.id} id={task.id}
-                data={{ ...task, stageId: 'unassigned' }}
-              >
-                <ProjectCardMemo
-                  {...task}
-                  dueDate={task.dueDate || undefined}
-                />
-              </KanbanItem>
-            ))}
 
-            {!taskStages.unassignedStage.length && (
-              <KanbanAddCardButton
-                onClick={() => handleAddCard({ stageId: 'unassigned' })}
-              />
-            )}
-          </KanbanColumn>
 
           {taskStages.columns?.map((column) => (
             <KanbanColumn
               key={column.id}
               id={column.id}
-              title={column.title}
+              title={column.title === 'IN REVIEW' ? 'NEED HELP' : column.title}
               count={column.tasks.length}
               onAddClick={() => handleAddCard({ stageId: column.id })}
             >

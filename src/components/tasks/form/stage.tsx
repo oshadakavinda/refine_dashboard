@@ -112,12 +112,11 @@ export const StageForm = ({ isLoading }: Props) => {
               // determines whether the width of the dropdown menu should match the width of the select box.
               popupMatchSelectWidth={false}
               // concat the options with an option for unassigned stage
-              options={selectProps.options?.concat([
-                {
-                  label: "Unassigned",
-                  value: null,
-                },
-              ])}
+              // rename IN REVIEW to NEED HELP
+              options={selectProps.options?.map((option) => ({
+                ...option,
+                label: option.label === "IN REVIEW" ? "NEED HELP" : option.label,
+              }))}
               bordered={false}
               showSearch={false}
               placeholder="Select a stage"

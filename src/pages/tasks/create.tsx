@@ -159,6 +159,10 @@ const TasksCreatePage = () => {
         <Form.Item label="Stage" name="stageId">
           <Select
             {...stageSelectProps}
+            options={stageSelectProps.options?.map((option) => ({
+              ...option,
+              label: option.label === "IN REVIEW" ? "NEED HELP" : option.label,
+            }))}
             placeholder="Select stage"
             style={{ width: "100%" }}
             allowClear
