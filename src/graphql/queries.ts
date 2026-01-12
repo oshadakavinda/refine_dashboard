@@ -249,3 +249,28 @@ export const TASK_STAGES_SELECT_QUERY = gql`
     }
   }
 `;
+
+// Query to get announcements list
+export const ANNOUNCEMENTS_QUERY = gql`
+  query Announcements(
+    $filter: AnnouncementFilter!
+    $sorting: [AnnouncementSort!]
+    $paging: OffsetPaging!
+  ) {
+    announcements(filter: $filter, sorting: $sorting, paging: $paging) {
+      totalCount
+      nodes {
+        id
+        title
+        content
+        createdAt
+        updatedAt
+        author {
+          id
+          name
+          avatarUrl
+        }
+      }
+    }
+  }
+`;

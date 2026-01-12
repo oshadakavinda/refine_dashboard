@@ -6,7 +6,14 @@ import { useNotificationProvider } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
 import { authProvider, dataProvider, liveProvider } from "./providers";
-import { ForgotPassword, Login, Register } from "./pages";
+import {
+  ForgotPassword,
+  Login,
+  Register,
+  AnnouncementsList,
+  AnnouncementsCreate,
+  AnnouncementsEdit
+} from "./pages";
 
 import routerBindings, {
   CatchAllNavigate,
@@ -67,7 +74,18 @@ function App() {
                     <Route path="new" element={<CreateTask />} />
                     <Route path="edit/:id" element={<EditTask />} />
                   </Route>
+                  <Route path="/announcements">
+                    <Route index element={
+                      <AnnouncementsList>
+                        <Outlet />
+                      </AnnouncementsList>
+                    } />
+                    <Route path="new" element={<AnnouncementsCreate />} />
+                    <Route path="edit/:id" element={<AnnouncementsEdit />} />
+                  </Route>
+                  <Route path="/" element={<CatchAllNavigate to="/tasks" />} />
                 </Route>
+                <Route path="*" element={<CatchAllNavigate to="/login" />} />
               </Routes>
               <RefineKbar />
               <UnsavedChangesNotifier />

@@ -1,11 +1,16 @@
 import { useSearchParams } from "react-router-dom";
 
-import { useModalForm } from "@refinedev/antd";
+import { useModalForm, useSelect } from "@refinedev/antd";
 import { useNavigation } from "@refinedev/core";
+import { GetFieldsFromList } from "@refinedev/nestjs-query";
 
-import { Form, Input, Modal } from "antd";
+import { DatePicker, Form, Input, Modal, Select } from "antd";
+import MDEditor from "@uiw/react-md-editor";
+import dayjs from "dayjs";
 
 import { CREATE_TASK_MUTATION } from "@/graphql/mutations";
+import { USERS_SELECT_QUERY, TASK_STAGES_SELECT_QUERY } from "@/graphql/queries";
+import { UsersSelectQuery, TaskStagesSelectQuery } from "@/graphql/types";
 
 const TasksCreatePage = () => {
   // get search params from the url
@@ -42,6 +47,36 @@ const TasksCreatePage = () => {
     },
   });
 
+  // Fetch users for the users select field
+  const { selectProps: userSelectProps } = useSelect<GetFieldsFromList<UsersSelectQuery>>({
+    resource: "users",
+    meta: {
+      gqlQuery: USERS_SELECT_QUERY,
+    },
+    optionLabel: "name",
+  });
+
+  // Fetch task stages for the stage select field
+  const { selectProps: stageSelectProps } = useSelect<GetFieldsFromList<TaskStagesSelectQuery>>({
+    resource: "taskStages",
+    filters: [
+      {
+        field: "title",
+        operator: "in",
+        value: ["TODO", "IN PROGRESS", "IN REVIEW", "DONE"],
+      },
+    ],
+    sorters: [
+      {
+        field: "createdAt",
+        order: "asc",
+      },
+    ],
+    meta: {
+      gqlQuery: TASK_STAGES_SELECT_QUERY,
+    },
+  });
+
   return (
     <Modal
       {...modalProps}
@@ -62,15 +97,59 @@ const TasksCreatePage = () => {
           // on finish, call the onFinish method of useModalForm to perform the mutation
           formProps?.onFinish?.({
             ...values,
-            stageId: searchParams.get("stageId")
-              ? Number(searchParams.get("stageId"))
-              : null,
-            userIds: [],
+            stageId: values.stageId
+              ? Number(values.stageId)
+              : searchParams.get("stageId")
+                ? Number(searchParams.get("stageId"))
+                : null,
+            userIds: values.userIds || [],
+            dueDate: values.dueDate ? dayjs(values.dueDate).toISOString() : undefined,
           });
         }}
       >
-        <Form.Item label="Title" name="title" rules={[{ required: true }]}>
-          <Input />
+        <Form.Item label="Title" name="title" rules={[{ required: true, message: "Please enter a title" }]}>
+          <Input placeholder="Enter task title" />
+        </Form.Item>
+
+        <Form.Item label="Description" name="description">
+          <MDEditor preview="edit" data-color-mode="light" height={200} />
+        </Form.Item>
+
+        <Form.Item
+          label="Due Date"
+          name="dueDate"
+          getValueProps={(value) => {
+            if (!value) return { value: undefined };
+            return { value: dayjs(value) };
+          }}
+        >
+          <DatePicker
+            format="YYYY-MM-DD HH:mm"
+            showTime={{
+              showSecond: false,
+              format: "HH:mm",
+            }}
+            style={{ width: "100%" }}
+            placeholder="Select due date"
+          />
+        </Form.Item>
+
+        <Form.Item label="Assigned Users" name="userIds">
+          <Select
+            {...userSelectProps}
+            mode="multiple"
+            placeholder="Select users"
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item label="Stage" name="stageId">
+          <Select
+            {...stageSelectProps}
+            placeholder="Select stage"
+            style={{ width: "100%" }}
+            allowClear
+          />
         </Form.Item>
       </Form>
     </Modal>

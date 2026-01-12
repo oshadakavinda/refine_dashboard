@@ -99,3 +99,27 @@ export const UPDATE_TASK_MUTATION = gql`
     }
   }
 `;
+
+// Mutation to create a new announcement
+export const CREATE_ANNOUNCEMENT_MUTATION = gql`
+  mutation CreateAnnouncement($input: CreateOneAnnouncementInput!) {
+    createOneAnnouncement(input: $input) {
+      id
+      title
+      content
+      createdAt
+    }
+  }
+`;
+
+// Mutation to update an announcement
+export const UPDATE_ANNOUNCEMENT_MUTATION = gql`
+  mutation UpdateAnnouncement($input: UpdateOneAnnouncementInput!) {
+    updateOneAnnouncement(input: $input) {
+      id
+      title
+      content
+      updatedAt
+    }
+  }
+`;
