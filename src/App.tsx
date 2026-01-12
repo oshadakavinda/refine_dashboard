@@ -41,7 +41,7 @@ function App() {
                 default: dataProvider,
                 announcements: announcementsProvider,
               }}
-              liveProvider={liveProvider}
+              // liveProvider={liveProvider}
               notificationProvider={useNotificationProvider}
               routerProvider={routerBindings}
               authProvider={authProvider}

@@ -19,7 +19,10 @@ export const resources: IResourceItem[] = [
     edit: '/announcements/edit/:id',
     meta: {
       label: 'Announcements',
-      icon: <NotificationOutlined />
-    }
+      icon: <NotificationOutlined />,
+    },
+    options: {
+      liveMode: 'off',
+    },
   }
 ]

@@ -11,6 +11,7 @@ const AnnouncementsEditPage = () => {
         action: "edit",
         defaultVisible: true,
         resource: "announcements",
+        dataProviderName: "announcements",
     });
 
     const { title, content } = queryResult?.data?.data ?? {};

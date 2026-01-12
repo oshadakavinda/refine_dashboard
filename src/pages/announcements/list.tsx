@@ -1,7 +1,6 @@
 import { useModalForm } from "@refinedev/antd";
 import { useTable } from "@refinedev/antd";
 import { HttpError } from "@refinedev/core";
-import { GetFieldsFromList } from "@refinedev/nestjs-query";
 
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Space, Table, Typography } from "antd";
@@ -14,6 +13,7 @@ const AnnouncementsList = ({ children }: React.PropsWithChildren) => {
     const { tableProps } = useTable({
         resource: "announcements",
         syncWithLocation: true,
+        dataProviderName: "announcements",
     });
 
     return (
@@ -38,10 +38,16 @@ const AnnouncementsList = ({ children }: React.PropsWithChildren) => {
                 <Table
                     {...tableProps}
                     rowKey="id"
-                    pagination={{
-                        ...tableProps.pagination,
-                        showSizeChanger: true,
-                    }}
+                    pagination={
+                        tableProps?.pagination === false
+                            ? false
+                            : {
+                                current: tableProps?.pagination?.current || 1,
+                                pageSize: tableProps?.pagination?.pageSize || 10,
+                                total: tableProps?.pagination?.total || 0,
+                                showSizeChanger: true,
+                            }
+                    }
                 >
                     <Table.Column
                         dataIndex="title"

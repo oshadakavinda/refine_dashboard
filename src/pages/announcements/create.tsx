@@ -16,6 +16,7 @@ const AnnouncementsCreatePage = () => {
         action: "create",
         defaultVisible: true,
         resource: "announcements",
+        dataProviderName: "announcements",
     });
 
     return (
