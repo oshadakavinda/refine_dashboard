@@ -8,17 +8,12 @@ import { Button, Space, Table, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
-import { ANNOUNCEMENTS_QUERY } from "@/graphql/queries";
-
 const AnnouncementsList = ({ children }: React.PropsWithChildren) => {
     const navigate = useNavigate();
 
     const { tableProps } = useTable({
         resource: "announcements",
         syncWithLocation: true,
-        meta: {
-            gqlQuery: ANNOUNCEMENTS_QUERY,
-        },
     });
 
     return (

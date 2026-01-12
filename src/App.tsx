@@ -6,6 +6,7 @@ import { useNotificationProvider } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
 import { authProvider, dataProvider, liveProvider } from "./providers";
+import { announcementsProvider } from "./providers/announcementsProvider";
 import {
   ForgotPassword,
   Login,
@@ -36,7 +37,10 @@ function App() {
         <AntdApp>
           <DevtoolsProvider>
             <Refine
-              dataProvider={dataProvider}
+              dataProvider={{
+                default: dataProvider,
+                announcements: announcementsProvider,
+              }}
               liveProvider={liveProvider}
               notificationProvider={useNotificationProvider}
               routerProvider={routerBindings}

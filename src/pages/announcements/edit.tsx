@@ -4,8 +4,6 @@ import { useNavigation } from "@refinedev/core";
 import { Form, Input, Modal } from "antd";
 import MDEditor from "@uiw/react-md-editor";
 
-import { UPDATE_ANNOUNCEMENT_MUTATION } from "@/graphql/mutations";
-
 const AnnouncementsEditPage = () => {
     const { list } = useNavigation();
 
@@ -13,9 +11,6 @@ const AnnouncementsEditPage = () => {
         action: "edit",
         defaultVisible: true,
         resource: "announcements",
-        meta: {
-            gqlMutation: UPDATE_ANNOUNCEMENT_MUTATION,
-        },
     });
 
     const { title, content } = queryResult?.data?.data ?? {};

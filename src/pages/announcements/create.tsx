@@ -6,8 +6,6 @@ import { useNavigation } from "@refinedev/core";
 import { DatePicker, Form, Input, Modal } from "antd";
 import MDEditor from "@uiw/react-md-editor";
 
-import { CREATE_ANNOUNCEMENT_MUTATION } from "@/graphql/mutations";
-
 const { TextArea } = Input;
 
 const AnnouncementsCreatePage = () => {
@@ -18,9 +16,6 @@ const AnnouncementsCreatePage = () => {
         action: "create",
         defaultVisible: true,
         resource: "announcements",
-        meta: {
-            gqlMutation: CREATE_ANNOUNCEMENT_MUTATION,
-        },
     });
 
     return (
