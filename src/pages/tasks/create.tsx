@@ -12,17 +12,26 @@ import { CREATE_TASK_MUTATION } from "@/graphql/mutations";
 import { USERS_SELECT_QUERY, TASK_STAGES_SELECT_QUERY } from "@/graphql/queries";
 import { UsersSelectQuery, TaskStagesSelectQuery } from "@/graphql/types";
 
+
+type TaskFormValues = {
+  title: string;
+  description: string;
+  stageId?: number;
+  dueDate?: string;
+  userIds?: number[];
+};
+
 const TasksCreatePage = () => {
   // get search params from the url
   const [searchParams] = useSearchParams();
 
-  /**
-   * useNavigation is a hook by Refine that allows you to navigate to a page.
-   * https://refine.dev/docs/routing/hooks/use-navigation/
-   *
-   * list method navigates to the list page of the specified resource.
-   * https://refine.dev/docs/routing/hooks/use-navigation/#list
-   */ const { list } = useNavigation();
+    /**
+     * useNavigation is a hook by Refine that allows you to navigate to a page.
+     * https://refine.dev/docs/routing/hooks/use-navigation/
+     *
+     * list method navigates to the list page of the specified resource.
+     * https://refine.dev/docs/routing/hooks/use-navigation/#list
+     */ const { list } = useNavigation();
 
   /**
    * useModalForm is a hook by Refine that allows you manage a form inside a modal.
@@ -36,7 +45,11 @@ const TasksCreatePage = () => {
    * modalProps -> It's an instance of Modal that manages modal state and actions like onOk, onCancel, etc.
    * https://refine.dev/docs/ui-integrations/ant-design/hooks/use-modal-form/#modalprops
    */
-  const { formProps, modalProps, close } = useModalForm({
+  const { formProps, modalProps, close } = useModalForm<
+    GetFieldsFromList<TaskStagesSelectQuery>,
+    any,
+    TaskFormValues
+  >({
     // specify the action to perform i.e., create or edit
     action: "create",
     // specify whether the modal should be visible by default
@@ -101,7 +114,7 @@ const TasksCreatePage = () => {
               ? Number(values.stageId)
               : searchParams.get("stageId")
                 ? Number(searchParams.get("stageId"))
-                : null,
+                : undefined,
             userIds: values.userIds || [],
             dueDate: values.dueDate ? dayjs(values.dueDate).toISOString() : undefined,
           });

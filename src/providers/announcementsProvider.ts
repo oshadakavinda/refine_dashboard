@@ -22,6 +22,29 @@ const saveAnnouncements = (announcements: any[]) => {
     localStorage.setItem(ANNOUNCEMENTS_KEY, JSON.stringify(announcements));
 };
 
+interface Announcement {
+    id: string;
+    title: string;
+    content: string;
+    author: {
+        id: string;
+        name: string;
+        avatarUrl: string | null;
+    };
+    createdAt: string;
+    updatedAt: string;
+}
+
+interface CreateAnnouncementVariables {
+    title: string;
+    content: string;
+}
+
+interface UpdateAnnouncementVariables {
+    title?: string;
+    content?: string;
+}
+
 export const announcementsProvider: DataProvider = {
     getList: async ({ pagination, sorters, filters }) => {
         const announcements = getAnnouncements();
@@ -81,11 +104,12 @@ export const announcementsProvider: DataProvider = {
     create: async ({ variables }) => {
         const announcements = getAnnouncements();
         const currentUser = getCurrentUser();
+        const { title, content } = variables as CreateAnnouncementVariables;
 
-        const newAnnouncement = {
+        const newAnnouncement: Announcement = {
             id: String(Date.now()),
-            title: variables.title,
-            content: variables.content,
+            title,
+            content,
             author: currentUser,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -95,7 +119,7 @@ export const announcementsProvider: DataProvider = {
         saveAnnouncements(announcements);
 
         return {
-            data: newAnnouncement,
+            data: newAnnouncement as any,
         };
     },
 
@@ -107,17 +131,19 @@ export const announcementsProvider: DataProvider = {
             throw new Error("Announcement not found");
         }
 
+        const { title, content } = variables as UpdateAnnouncementVariables;
+
         announcements[index] = {
             ...announcements[index],
-            title: variables.title,
-            content: variables.content,
+            title: title || announcements[index].title,
+            content: content || announcements[index].content,
             updatedAt: new Date().toISOString(),
         };
 
         saveAnnouncements(announcements);
 
         return {
-            data: announcements[index],
+            data: announcements[index] as any,
         };
     },
 
@@ -128,7 +154,7 @@ export const announcementsProvider: DataProvider = {
         saveAnnouncements(filteredAnnouncements);
 
         return {
-            data: { id },
+            data: { id } as any,
         };
     },
 
@@ -145,5 +171,5 @@ export const announcementsProvider: DataProvider = {
         );
         return { data: filteredAnnouncements };
     },
-    custom: async () => ({ data: {} }),
+    custom: async () => ({ data: {} as any }),
 };
