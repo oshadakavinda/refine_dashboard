@@ -1,5 +1,4 @@
 import { Authenticated, GitHubBanner, Refine, WelcomePage } from "@refinedev/core";
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import { useNotificationProvider } from "@refinedev/antd";
@@ -35,68 +34,65 @@ function App() {
     <BrowserRouter>
       <RefineKbarProvider>
         <AntdApp>
-          <DevtoolsProvider>
-            <Refine
-              dataProvider={{
-                default: dataProvider,
-                announcements: announcementsProvider,
-              }}
-              // liveProvider={liveProvider}
-              notificationProvider={useNotificationProvider}
-              routerProvider={routerBindings}
-              authProvider={authProvider}
-              resources={resources}
-              options={{
-                syncWithLocation: true,
-                warnWhenUnsavedChanges: true,
-                useNewQueryKeys: true,
-                projectId: "WVyLEd-4karEq-tItoeC",
-                liveMode: "auto",
-              }}
-            >
-              <Routes>
-                <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route
-                  element={
-                    <Authenticated
-                      key="authenticated-layout"
-                      fallback={<CatchAllNavigate to="/login" />}
-                    >
-                      <Layout>
-                        <Outlet />
-                      </Layout>
-                    </Authenticated>
-                  }>
-                  <Route path="/tasks">
-                    <Route index element={
-                      <List>
-                        <Outlet />
-                      </List>
-                    } />
-                    <Route path="new" element={<CreateTask />} />
-                    <Route path="edit/:id" element={<EditTask />} />
-                  </Route>
-                  <Route path="/announcements">
-                    <Route index element={
-                      <AnnouncementsList>
-                        <Outlet />
-                      </AnnouncementsList>
-                    } />
-                    <Route path="new" element={<AnnouncementsCreate />} />
-                    <Route path="edit/:id" element={<AnnouncementsEdit />} />
-                  </Route>
-                  <Route path="/" element={<CatchAllNavigate to="/tasks" />} />
+          <Refine
+            dataProvider={{
+              default: dataProvider,
+              announcements: announcementsProvider,
+            }}
+            // liveProvider={liveProvider}
+            notificationProvider={useNotificationProvider}
+            routerProvider={routerBindings}
+            authProvider={authProvider}
+            resources={resources}
+            options={{
+              syncWithLocation: true,
+              warnWhenUnsavedChanges: true,
+              useNewQueryKeys: true,
+              projectId: "WVyLEd-4karEq-tItoeC",
+              liveMode: "auto",
+            }}
+          >
+            <Routes>
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route
+                element={
+                  <Authenticated
+                    key="authenticated-layout"
+                    fallback={<CatchAllNavigate to="/login" />}
+                  >
+                    <Layout>
+                      <Outlet />
+                    </Layout>
+                  </Authenticated>
+                }>
+                <Route path="/tasks">
+                  <Route index element={
+                    <List>
+                      <Outlet />
+                    </List>
+                  } />
+                  <Route path="new" element={<CreateTask />} />
+                  <Route path="edit/:id" element={<EditTask />} />
                 </Route>
-                <Route path="*" element={<CatchAllNavigate to="/login" />} />
-              </Routes>
-              <RefineKbar />
-              <UnsavedChangesNotifier />
-              <DocumentTitleHandler />
-            </Refine>
-            <DevtoolsPanel />
-          </DevtoolsProvider>
+                <Route path="/announcements">
+                  <Route index element={
+                    <AnnouncementsList>
+                      <Outlet />
+                    </AnnouncementsList>
+                  } />
+                  <Route path="new" element={<AnnouncementsCreate />} />
+                  <Route path="edit/:id" element={<AnnouncementsEdit />} />
+                </Route>
+                <Route path="/" element={<CatchAllNavigate to="/tasks" />} />
+              </Route>
+              <Route path="*" element={<CatchAllNavigate to="/login" />} />
+            </Routes>
+            <RefineKbar />
+            <UnsavedChangesNotifier />
+            <DocumentTitleHandler />
+          </Refine>
         </AntdApp>
       </RefineKbarProvider>
     </BrowserRouter>

@@ -1,4 +1,5 @@
 import { KanbanColumnSkeleton, ProjectCardSkeleton } from '@/components'
+import AnnouncementBanner from "@/components/announcement-banner";
 import { KanbanAddCardButton } from '@/components/tasks/kanban/add-card-button'
 import { KanbanBoardContainer, KanbanBoard } from '@/components/tasks/kanban/board'
 import { ProjectCardMemo } from '@/components/tasks/kanban/card'
@@ -72,19 +73,19 @@ const List = ({ children }: React.PropsWithChildren) => {
       ...stage,
       tasks: tasks.data.filter((task) => task.stageId?.toString() === stage.id)
     }))
-    
+
     return {
       unassignedStage,
       columns: grouped
     }
   }, [stages, tasks])
 
-  const handleAddCard = (args: { stageId: string}) => {
-    const path = args.stageId === 'unassigned' 
+  const handleAddCard = (args: { stageId: string }) => {
+    const path = args.stageId === 'unassigned'
       ? '/tasks/new'
-      : `/tasks/new?stageId=${args.stageId}` 
+      : `/tasks/new?stageId=${args.stageId}`
 
-      replace(path);
+    replace(path);
   }
 
   const handleOnDragEnd = (event: DragEndEvent) => {
@@ -92,9 +93,9 @@ const List = ({ children }: React.PropsWithChildren) => {
     const taskId = event.active.id as string
     const taskStageId = event.active.data.current?.stageId
 
-    if(taskStageId === stageId) return;
+    if (taskStageId === stageId) return;
 
-    if(stageId === 'unassigned') {
+    if (stageId === 'unassigned') {
       stageId = null
     }
 
@@ -114,10 +115,13 @@ const List = ({ children }: React.PropsWithChildren) => {
 
   const isLoading = isLoadingStages || isLoadingTasks
 
-  if(isLoading) return <PageSkeleton />
+  if (isLoading) return <PageSkeleton />
 
   return (
     <>
+      <div style={{ padding: '0 24px' }}>
+        <AnnouncementBanner />
+      </div>
       <KanbanBoardContainer>
         <KanbanBoard onDragEnd={handleOnDragEnd}>
           <KanbanColumn
@@ -130,7 +134,7 @@ const List = ({ children }: React.PropsWithChildren) => {
               <KanbanItem key={task.id} id={task.id}
                 data={{ ...task, stageId: 'unassigned' }}
               >
-                <ProjectCardMemo 
+                <ProjectCardMemo
                   {...task}
                   dueDate={task.dueDate || undefined}
                 />
@@ -138,7 +142,7 @@ const List = ({ children }: React.PropsWithChildren) => {
             ))}
 
             {!taskStages.unassignedStage.length && (
-              <KanbanAddCardButton 
+              <KanbanAddCardButton
                 onClick={() => handleAddCard({ stageId: 'unassigned' })}
               />
             )}
@@ -154,16 +158,16 @@ const List = ({ children }: React.PropsWithChildren) => {
             >
               {!isLoading && column.tasks.map((task) => (
                 <KanbanItem key={task.id} id={task.id} data={task}>
-                  <ProjectCardMemo 
+                  <ProjectCardMemo
                     {...task}
                     dueDate={task.dueDate || undefined}
                   />
                 </KanbanItem>
               ))}
               {!column.tasks.length && (
-                <KanbanAddCardButton 
-                onClick={() => handleAddCard({ stageId: column.id })}
-              />
+                <KanbanAddCardButton
+                  onClick={() => handleAddCard({ stageId: column.id })}
+                />
               )}
             </KanbanColumn>
           ))}
@@ -184,8 +188,8 @@ const PageSkeleton = () => {
     <KanbanBoardContainer>
       {Array.from({ length: columnCount }).map((_, index) => (
         <KanbanColumnSkeleton key={index}>
-          {Array.from({length: itemCount}).map((_, index)=> (
-           <ProjectCardSkeleton  key={index}/>
+          {Array.from({ length: itemCount }).map((_, index) => (
+            <ProjectCardSkeleton key={index} />
           ))}
         </KanbanColumnSkeleton>
       ))}
