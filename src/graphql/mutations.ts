@@ -83,6 +83,7 @@ export const UPDATE_TASK_MUTATION = gql`
       completed
       description
       dueDate
+      stageId
       stage {
         id
         title

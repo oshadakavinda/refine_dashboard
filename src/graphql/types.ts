@@ -63,7 +63,7 @@ export type UpdateTaskMutationVariables = Types.Exact<{
 export type UpdateTaskMutation = {
   updateOneTask: Pick<
     Types.Task,
-    "id" | "title" | "completed" | "description" | "dueDate"
+    "id" | "title" | "completed" | "description" | "dueDate" | "stageId"
   > & {
     stage?: Types.Maybe<Pick<Types.TaskStage, "id" | "title">>;
     users: Array<Pick<Types.User, "id" | "name" | "avatarUrl">>;
